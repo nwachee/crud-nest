@@ -2,9 +2,11 @@ version: '3.8'
 services:
   mongodb:
     image: mongo:7
+    container_name: nestjs-mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     ports:
       - '27017:27017'
     volumes:
@@ -12,4 +14,3 @@ services:
 
 volumes:
   mongodb_data:
-
