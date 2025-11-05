@@ -1,98 +1,235 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# crudNest
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A RESTful API built with NestJS, MongoDB, and JWT authentication featuring user management and social login (Google/Apple).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Prerequisites
 
-## Description
+- Node.js (v18 or higher)
+- Yarn package manager
+- MongoDB (Docker, local, or Atlas)
+- Docker (optional, for MongoDB)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ yarn install
+# Installation
+#### 1.  Clone the repository
+``` bash
+git clone https://github.com/nwachee/crud-nest.git
+cd crud-nest
+```
+### 2. Install dependencies
+```bash 
+yarn install
 ```
 
-## Compile and run the project
+### 3. Set up environment variables
+Create a ```.env``` file in the root directory:
+``` env
+# MongoDB Connection
+MONGO_INITDB_ROOT_USERNAME=your-username
+MONGO_INITDB_ROOT_PASSWORD=your-password
+MONGO_INITDB_DATABASE=db-name
+MONGODB_URI=mongodb://<username>:<password>@localhost:27017/db_name?authSource=admin
 
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this
+JWT_EXPIRATION=1d
+
+# Google OAuth (Optional)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# Apple OAuth (Optional)
+APPLE_CLIENT_ID=your-apple-service-id
+APPLE_TEAM_ID=your-apple-team-id
+APPLE_KEY_ID=your-apple-key-id
+
+# Server
+PORT=3000
+```
+### 4. Start MongoDB
+***Option A: Using Docker***
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+docker compose up -d
 ```
 
-## Run tests
-
+***Option B: Using local MongoDB***
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+sudo systemctl start mongod
 ```
 
-## Deployment
+***Option C: Using MongoDB Atlas***
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+#### Update ```MONGODB_URI``` in ``` .env``` with your Atlas connection string.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# Usage
 
+### Run the application
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+# Development mode (with hot reload)
+yarn start:dev
+
+# Production mode
+yarn build
+yarn start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## API Endpoints
 
-## Resources
+### Authentication
 
-Check out a few resources that may come in handy when working with NestJS:
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/auth/register` | Register new user | No |
+| POST | `/auth/login` | Login user | No |
+| GET | `/auth/profile` | Get current user profile | Yes |
+| GET | `/auth/google` | Initiate Google OAuth | No |
+| GET | `/auth/google/callback` | Google OAuth callback | No |
+| POST | `/auth/apple` | Initiate Apple Sign In | No |
+| POST | `/auth/apple/callback` | Apple Sign In callback | No |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Users (Protected Routes)
 
-## Support
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/users` | Get all users | Yes |
+| GET | `/users/:id` | Get user by ID | Yes |
+| POST | `/users` | Create new user | Yes |
+| PATCH | `/users/:id` | Update user | Yes |
+| DELETE | `/users/:id` | Delete user | Yes |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Health Check
 
-## Stay in touch
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/healthcheck` | Check API status | No |
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## Authentication
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This API uses JWT (JSON Web Tokens) for authentication.
+
+### Register a new user
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123"
+  }'
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "email": "john@example.com",
+    "name": "John Doe"
+  }
+}
+```
+
+### Login
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "password": "password123"
+  }'
+```
+
+### Using the JWT token
+
+Add the token to the `Authorization` header for protected routes:
+```bash
+curl -X GET http://localhost:3000/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+---
+
+## Usage Examples
+
+### Create a user
+```bash
+curl -X POST http://localhost:3000/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "password": "securepass123"
+  }'
+```
+
+### Get all users
+```bash
+curl -X GET http://localhost:3000/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### Get user by ID
+```bash
+curl -X GET http://localhost:3000/users/507f1f77bcf86cd799439011 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### Update user
+```bash
+curl -X PATCH http://localhost:3000/users/507f1f77bcf86cd799439011 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Jane Updated"
+  }'
+```
+
+### Delete user
+```bash
+curl -X DELETE http://localhost:3000/users/507f1f77bcf86cd799439011 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### Health check
+```bash
+curl http://localhost:3000/healthcheck
+```
+
+---
+
+## Rate Limiting
+
+This API implements rate limiting to prevent abuse:
+
+- **Default limit**: 60 requests per minute per IP
+- **Response when exceeded**: `429 Too Many Requests`
+```json
+{
+  "statusCode": 429,
+  "message": "ThrottlerException: Too Many Requests"
+}
+```
+
+---
+
+## Request Logging
+
+All HTTP requests are logged with the following information:
+
+- HTTP method and endpoint
+- Status code
+- Response time
+- IP address
+- User agent
+
+**Example log:**
+```
+[HTTP] GET /users 200 1234b - 45ms - ::1 - PostmanRuntime/7.28.0
+```
+
+
+
+
