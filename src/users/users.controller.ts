@@ -1,5 +1,6 @@
 import {
   Controller,
+  UseGuards,
   Get,
   Post,
   Body,
@@ -10,10 +11,12 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard) // Protect all routes in this controller
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
