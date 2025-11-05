@@ -4,7 +4,11 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UserDocument } from '../users/schemas/user.schema';
-import { JwtPayload, UserResponse } from './interfaces/auth.interface';
+import {
+  JwtPayload,
+  UserResponse,
+  AuthResponse,
+} from './interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -81,6 +85,32 @@ export class AuthService {
       userId: payload.sub,
       email: payload.email,
       name: payload.name,
+    };
+  }
+
+  async googleLogin(profile: any): Promise<AuthResponse> {
+    const user = await this.usersService.findOrCreateSocialUser(
+      {
+        email: profile.email,
+        name: profile.name,
+        id: profile.id,
+      },
+      'google',
+    );
+
+    const payload: JwtPayload = {
+      email: user.email,
+      sub: user._id!.toString(),
+      name: user.name,
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user._id!.toString(),
+        email: user.email,
+        name: user.name,
+      },
     };
   }
 }

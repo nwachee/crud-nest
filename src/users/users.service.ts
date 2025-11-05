@@ -32,11 +32,17 @@ export class UsersService {
       throw new ConflictException('Email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const user = new this.userModel({
-      ...createUserDto,
-      password: hashedPassword,
-    });
+    // Only hash password if provided (for regular registration)
+    const userData: any = {
+      name: createUserDto.name,
+      email: createUserDto.email,
+    };
+
+    if (createUserDto.password) {
+      userData.password = await bcrypt.hash(createUserDto.password, 10);
+    }
+
+    const user = new this.userModel(userData);
     return user.save();
   }
 

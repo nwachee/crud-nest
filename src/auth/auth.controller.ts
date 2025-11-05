@@ -10,15 +10,9 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-
-interface RequestWithUser extends Request {
-  user: {
-    userId: string;
-    email: string;
-    name: string;
-  };
-}
+import { AuthResponse, RequestWithUser } from './interfaces/auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -46,5 +40,17 @@ export class AuthController {
   @Get('test')
   testAuth() {
     return { message: 'You are authenticated!' };
+  }
+
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth() {
+    // Initiates Google OAuth flow
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuthCallback(@Request() req: any): Promise<AuthResponse> {
+    return this.authService.googleLogin(req.user);
   }
 }

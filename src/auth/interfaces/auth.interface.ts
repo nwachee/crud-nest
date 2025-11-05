@@ -21,3 +21,11 @@ export interface AuthResponse {
   access_token: string;
   user: UserResponse;
 }
+
+export interface RequestWithUser extends Request {
+  user: {
+    userId: string;
+    email: string;
+    name: string;
+  };
+}
