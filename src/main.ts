@@ -15,14 +15,11 @@ async function bootstrap() {
     }),
   );
 
-  const configService = app.get(ConfigService);
-
-  const mongoUri = configService.get<string>('MONGODB_URI');
-  console.log('Connecting to MongoDB:', mongoUri);
+  app.get(ConfigService).get<string>('MONGODB_URI');
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  const url = await app.getUrl();
-  console.log(`Application is running on: ${url}`);
+  await app.getUrl();
+  // console.log(`Application is running on: ${url}`);
 }
 bootstrap();

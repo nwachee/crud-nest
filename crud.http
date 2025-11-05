@@ -1,0 +1,28 @@
+POST http://localhost:5000/auth/register
+content-type: application/json
+
+{
+    "name" : "crudStar",
+    "email" : "crud@star.com",
+    "password" : "12345678"
+}
+
+###
+
+POST http://localhost:5000/auth/login
+content-type: application/json  
+
+{
+    "email" : "crud@star.com",
+    "password" : "12345678"
+}
+
+###
+
+GET http://localhost:5000/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNydWRAc3Rhci5jb20iLCJzdWIiOiI2OTBiNmEzNTc4NjMwOTk3YmM0ZDJmYmUiLCJuYW1lIjoiY3J1ZFN0YXIiLCJpYXQiOjE3NjIzNTYwNDksImV4cCI6MTc2MjQ0MjQ0OX0.5tZbjFY0r5uozp4Zs9SIoa0_xe2RE_kGL6KyMc9vYCY
+
+###
+
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNydWRAc3Rhci5jb20iLCJzdWIiOiI2OTBiNmEzNTc4NjMwOTk3YmM0ZDJmYmUiLCJuYW1lIjoiY3J1ZFN0YXIiLCJpYXQiOjE3NjIzNTYwNDksImV4cCI6MTc2MjQ0MjQ0OX0.5tZbjFY0r5uozp4Zs9SIoa0_xe2RE_kGL6KyMc9vYCY
